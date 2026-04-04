@@ -10,15 +10,18 @@ compiles into native assembly (x86-64)
 
 (only linux support)
 
-```console
-$ cargo run sim
-```
+simulate program (mini interpreter)
 
 ```console
-$ cargo run com && ./output
+$ cargo run sim /examples/test.st
+```
+
+compile to asm and run natively
+
+```console
+$ cargo run com /examples/test.st && ./output
 ```
 
 ## todo
 
-1. unhardcode the program
-2. everything else
+1. everything else
