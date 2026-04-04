@@ -2,7 +2,7 @@
 
 > (because stoats are tall like a stack (lmao)(lol)(rofl))
 
-a rewrite of [tsoding's](https://www.youtube.com/@Tsoding) stack based language [porth](https://github.com/tsoding/porth) in rust.
+a rewrite of [tsoding's](https://www.youtube.com/@Tsoding) stack based language [porth](https://gitlab.com/tsoding/porth) in rust.
 
 compiles into native assembly (x86-64)
 
