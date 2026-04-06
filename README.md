@@ -24,4 +24,9 @@ $ cargo run com /examples/test.st && ./output
 
 ## todo
 
-1. everything else
+- [x] compiled
+- [x] native
+- [x] stack based
+- [ ] turing complete
+- [ ] statically typed
+- [ ] self hosted (rust as bootstrap, then rewrite language in itself)

@@ -1,23 +1,10 @@
 use std::env::args;
-use std::fs::{File, read_to_string};
+use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 use std::process::{Command, exit};
-
-struct Iota {
-    counter: usize,
-}
-
-impl Iota {
-    fn new() -> Iota {
-        Iota { counter: 0 }
-    }
-    fn next(&mut self) -> usize {
-        let result = self.counter;
-        self.counter += 1;
-        result
-    }
-}
+mod lexer;
+use crate::lexer::*;
 
 enum Op {
     Push(i32),
@@ -154,28 +141,32 @@ fn run_cmd(program: &str, args: &[&str]) {
     Command::new(program).args(args).status().unwrap();
 }
 
-fn parse_word_as_op(word: String) -> Op {
+fn parse_tok_as_op(file_path: &str, line_idx: usize, col: usize, tok: &str) -> Op {
     assert!(
         Op::COUNT == 4,
-        "exhaustive handling of ops in parse_word_as_op"
+        "exhaustive handling of ops in parse_tok_as_op"
     );
-    match word.as_str() {
+    match tok {
         "+" => Op::Plus,
         "-" => Op::Minus,
         "." => Op::Dump,
         _ => {
-            let word: i32 = word.parse().expect("cant parse that");
+            let word: i32 = tok.parse().unwrap_or_else(|_| {
+                eprintln!(
+                    "{}:{}:{}: unknown token '{}'",
+                    file_path, line_idx, col, tok
+                );
+                exit(1);
+            });
             Op::Push(word)
         }
     }
 }
 
 fn load_program_from_file(file_path: String) -> Vec<Op> {
-    let contents = read_to_string(file_path).unwrap();
-    let words: Vec<&str> = contents.split_whitespace().collect();
     let mut vec_ops: Vec<Op> = vec![];
-    for word in words {
-        vec_ops.push(parse_word_as_op(String::from(word)));
+    for (file_path, line_idx, col, tok) in lex_file(&file_path) {
+        vec_ops.push(parse_tok_as_op(&file_path, line_idx, col, &tok));
     }
     vec_ops
 }
